@@ -1,0 +1,43 @@
+GOVERNMENT BENEFITS PORTAL
+Automatic decisions, Logout and password recovery
+
+WINDOWS SETUP
+1. Extract both ZIPs to separate folders in Downloads.
+2. In IntelliJ, open the backend's government-benefits/pom.xml as a project.
+   Use JDK 21 or newer. Stop any older backend using port 8080.
+3. In the GovernmentBenefitsApplication Run Configuration, add DB_USERNAME
+   and DB_PASSWORD using your existing MySQL credentials. The backend uses
+   the government_benefits_db database. Start MySQL and run the backend.
+4. Open the extracted government-benefits-frontend folder containing
+   package.json. Run .\START_FRONTEND.cmd in PowerShell from that folder.
+   Follow the local URL it prints. The Angular proxy uses port 8080.
+
+PASSWORD RESET EMAIL
+To send reset links, add these variables to the backend Run Configuration
+with the values from your existing SMTP account:
+  MAIL_HOST       Your SMTP server
+  MAIL_PORT       587 by default
+  MAIL_USERNAME   Your SMTP username
+  MAIL_PASSWORD   Your SMTP password or app password
+  MAIL_FROM       Sender address if different from MAIL_USERNAME
+  FRONTEND_URL    http://localhost:4200 by default
+The defaults use SMTP authentication and STARTTLS. Set MAIL_SMTP_AUTH or
+MAIL_STARTTLS only if your SMTP server requires a different setting.
+If Angular is running on a different port, set FRONTEND_URL to its actual URL.
+Restart Spring Boot after setting the variables.
+
+On Sign In, select Forgot Password. Enter your portal account email.
+Use the email link within 30 minutes and choose a password of 12 or more
+characters (72 UTF-8 bytes maximum). Sign in with your new password.
+The Logout button appears in the navigation after signing in.
+
+AUTOMATIC DECISIONS
+Sign in with an applicant account and open My Applications. Select a program
+and fill in its questions. With a matching rule from MySQL, the backend checks
+income and age and immediately shows Approved or Denied with the saved reason.
+To demonstrate both outcomes, use the same eligible adult and household size,
+then submit once at the income limit and once a cent above it. If the program
+has no rule for the household size, the page explains the missing rule.
+
+In Swagger, http://localhost:8080/swagger-ui/index.html, an administrator
+can view or add criteria at /api/eligibility/rules.
